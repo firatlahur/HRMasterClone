@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92a21b86752549349876efe4013354bf, type: 3}
+  m_Name: Candidate Manager
+  m_EditorClassIdentifier: 
+  candidates:
+  - {fileID: 5894767742486684898, guid: 46490e392041e4e4e9cb55474a071c28, type: 3}
+  - {fileID: 1450513637752705166, guid: 174a157a6d071164e8d8d1baf5657d5a, type: 3}
+  candidatesToSpawn: 10
+  movementSpeed: 1.5
+  maleNames:
+  - male1
+  - male2
+  - male3
+  - male4
+  - male5
+  femaleNames:
+  - female1
+  - female2
+  - female3
+  - female4
+  - female5

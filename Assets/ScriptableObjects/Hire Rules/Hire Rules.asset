@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f48c08f36aecc84ba231cc88e1cf59b, type: 3}
+  m_Name: Hire Rules
+  m_EditorClassIdentifier: 
+  hiringPositions:
+  - Unity Developer
+  - FrontEnd Developer
+  - BackEnd Developer
+  - FullStack Developer
+  - iOS Developer
+  minExpYears: 1
+  maxExpYears: 5
+  minSalaryDollars: 1000
+  maxSalaryDollars: 3000
