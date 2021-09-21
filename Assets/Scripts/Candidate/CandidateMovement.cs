@@ -1,4 +1,5 @@
 using Candidate.ScriptableObjects;
+using Core;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ namespace Candidate
     {
         public CandidateManager candidateManager;
         public CandidateInstantiate candidateInstantiate;
+        public GameManager gameManager;
         public GameObject chairToSit, exitDoor;
 
         public AnimatorController idleController, otherAnimsController;
@@ -23,7 +25,7 @@ namespace Candidate
 
         private void Update()
         {
-            if (Input.GetMouseButton(0) && !_inMeeting)
+            if (gameManager.isGameStarted && !_inMeeting)
             {
                 Movement();
             }
