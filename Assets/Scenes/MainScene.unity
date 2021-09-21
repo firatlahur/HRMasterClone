@@ -391,6 +391,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isGameStarted: 0
   inMeeting: 0
+  idCardValidDragOffset: 75
 --- !u!4 &250431951
 Transform:
   m_ObjectHideFlags: 0
@@ -785,7 +786,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: -34}
+  m_AnchoredPosition: {x: -5.5, y: -32.6}
   m_SizeDelta: {x: 65.5541, y: 21}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &348912392
@@ -1485,7 +1486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &856412893
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1632,7 +1633,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1108122395
 RectTransform:
   m_ObjectHideFlags: 0
