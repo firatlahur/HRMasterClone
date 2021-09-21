@@ -4,6 +4,6 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
-       [HideInInspector] public bool isGameStarted;
+       [HideInInspector] public bool isGameStarted, inMeeting;
     }
 }

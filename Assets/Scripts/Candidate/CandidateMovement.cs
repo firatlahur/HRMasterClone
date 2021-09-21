@@ -12,9 +12,8 @@ namespace Candidate
         public GameManager gameManager;
         public GameObject chairToSit, exitDoor;
 
-        public AnimatorController idleController, otherAnimsController;
+        public AnimatorController nonIdleAnimController;
 
-        private bool _inMeeting;
         private Quaternion _firstInLineRotation;
 
         private void Awake()
@@ -25,7 +24,7 @@ namespace Candidate
 
         private void Update()
         {
-            if (gameManager.isGameStarted && !_inMeeting)
+            if (gameManager.isGameStarted && !gameManager.inMeeting)
             {
                 Movement();
             }
@@ -39,7 +38,7 @@ namespace Candidate
             firstCandidate.transform.position = Vector3.MoveTowards(firstCandidate.transform.position,
                 chairToSit.transform.position, candidateManager.movementSpeed * Time.deltaTime);
 
-            firstCandidateAnimator.runtimeAnimatorController = otherAnimsController;
+            firstCandidateAnimator.runtimeAnimatorController = nonIdleAnimController;
 
 
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
@@ -61,7 +60,7 @@ namespace Candidate
             
             if (firstCandidate.transform.position != chairToSit.transform.position) return;
             firstCandidateAnimator.Play("Sitting");
-            _inMeeting = true;
+            gameManager.inMeeting = true;
             ListOrganizer();
         }
 
@@ -82,9 +81,9 @@ namespace Candidate
 
         private void ListOrganizer()
         {
-            if (_inMeeting)
+            if (gameManager.inMeeting)
             {
-                Debug.Log("IN MEETING");
+                Debug.Log("IN MEETING LIST ORGANIZER");
             }
         }
     }
