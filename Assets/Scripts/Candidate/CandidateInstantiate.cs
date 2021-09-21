@@ -9,8 +9,9 @@ namespace Candidate
 {
     public class CandidateInstantiate : MonoBehaviour
     {
+        [HideInInspector]public List<GameObject> allCandidates;
+
         public CandidateManager candidateManager;
-        public List<GameObject> allCandidates;
         public GameObject candidateContainer;
         
         
