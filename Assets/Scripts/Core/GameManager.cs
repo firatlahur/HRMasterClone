@@ -6,6 +6,6 @@ namespace Core
     {
        [HideInInspector] public bool isGameStarted, inMeeting;
 
-       public float idCardValidDragOffset;
+       public float idCardValidDragOffset, idCardDragSpeed;
     }
 }

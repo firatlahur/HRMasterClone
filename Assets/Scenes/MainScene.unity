@@ -392,6 +392,7 @@ MonoBehaviour:
   isGameStarted: 0
   inMeeting: 0
   idCardValidDragOffset: 75
+  idCardDragSpeed: 1.5
 --- !u!4 &250431951
 Transform:
   m_ObjectHideFlags: 0

@@ -39,6 +39,7 @@ namespace UI
 
             _male = _maleCandidate;
             _female = _femaleCandidate;
+            
             _candidateInfoDefaultPosition = candidateInformation.rectTransform.position;
         }
 
@@ -49,36 +50,40 @@ namespace UI
                 SetCardInformation();
             }
 
-            if (Input.touchCount > 0)
+            if (Input.touchCount > 0 && candidateInformation.IsActive())
             {
                 if (gameManager.inMeeting && Input.GetTouch(0).phase == TouchPhase.Moved)
                 {
                     if (Input.GetTouch(0).deltaPosition.x > 0)
                     {
-                        candidateInformation.transform.Translate(candidateInformation.transform.position * Time.deltaTime,Space.World);
+                        candidateInformation.transform.Translate(
+                            candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
+                            Space.World);
                     }
                     
                     if (Input.GetTouch(0).deltaPosition.x < 0)
                     {
-                        candidateInformation.transform.Translate(-candidateInformation.transform.position * Time.deltaTime,Space.World);
+                        candidateInformation.transform.Translate(
+                            -candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
+                            Space.World);
                     }
                 }
-                
+
                 if (_isDeciding && Input.GetTouch(0).phase == TouchPhase.Ended)
                 {
-                    bool posCheck = candidateInformation.rectTransform.anchoredPosition.x > -50f;
-                    
-                    if (candidateInformation.rectTransform.anchoredPosition.x < gameManager.idCardValidDragOffset && posCheck)
+                    bool hiredAxisCheck = candidateInformation.rectTransform.anchoredPosition.x > -50f;
+
+                    if (candidateInformation.rectTransform.anchoredPosition.x < 75f && hiredAxisCheck)
                     {
                         candidateInformation.transform.position = _candidateInfoDefaultPosition;
                     }
-                    
-                    if(candidateInformation.rectTransform.anchoredPosition.x > gameManager.idCardValidDragOffset)
+
+                    if (candidateInformation.rectTransform.anchoredPosition.x > 75f)
                     {
                         HiredCandidate();
                     }
-                    
-                    if(candidateInformation.rectTransform.anchoredPosition.x < -gameManager.idCardValidDragOffset && !posCheck)
+
+                    if (Input.GetTouch(0).deltaPosition.x < 0 && !hiredAxisCheck)
                     {
                         RejectedCandidate();
                     }
@@ -91,9 +96,8 @@ namespace UI
             _isDeciding = true;
             if (_isDeciding)
             {
-                candidateName.text = _firstCandidate.name;
                 candidateInformation.gameObject.SetActive(true);
-            
+                
                 if (_male)
                 {
                     candidateExperience.text = "+" + _maleCandidate.candidateExperience + " Years";
@@ -132,6 +136,7 @@ namespace UI
                     else
                     {
                         candidatePhoto.sprite = candidatePhotoArray[MaleSprite];
+                        _firstCandidate.name = candidateManager.maleNames[Random.Range(0, candidateManager.maleNames.Length)];
                     }
                 }
                 else if (_female)
@@ -147,8 +152,10 @@ namespace UI
                     else
                     {
                         candidatePhoto.sprite = candidatePhotoArray[FemaleSprite];
+                        _firstCandidate.name = candidateManager.femaleNames[Random.Range(0, candidateManager.femaleNames.Length)];
                     }
                 }
+                candidateName.text = _firstCandidate.name;
                 _fakeCheck = true;
             }
         }
@@ -157,6 +164,7 @@ namespace UI
         {
             candidateInformation.gameObject.SetActive(false);
             gameManager.inMeeting = false;
+            _fakeCheck = false;
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
         }
         
@@ -164,6 +172,7 @@ namespace UI
         {
             candidateInformation.gameObject.SetActive(false);
             gameManager.inMeeting = false;
+            _fakeCheck = false;
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
         }
     }
