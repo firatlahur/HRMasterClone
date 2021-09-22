@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using Candidate;
 using Candidate.ScriptableObjects;
@@ -30,22 +31,18 @@ namespace UI
 
         private bool _male, _female, _fakeCheck, _isDeciding;
 
-        private IEnumerator Start()
+        private void Awake()
         {
-            yield return new WaitForEndOfFrame();
-            _firstCandidate = candidateInstantiate.allCandidates[0];
-            
-            _maleCandidate = _firstCandidate.transform.GetComponent<MaleCandidate>();
-            _femaleCandidate = _firstCandidate.transform.GetComponent<FemaleCandidate>();
-
-            _male = _maleCandidate;
-            _female = _femaleCandidate;
-            
             _candidateInfoDefaultPosition = candidateInformation.rectTransform.position;
         }
 
         private void Update()
         {
+            if (gameManager.isGameStarted)
+            {
+                _firstCandidate = candidateInstantiate.allCandidates[0];
+            }
+
             if (gameManager.inMeeting && !_isDeciding)
             {
                 SetCardInformation();
@@ -99,7 +96,14 @@ namespace UI
         
         private void SetCardInformation()
         {
+            _maleCandidate = _firstCandidate.transform.GetComponent<MaleCandidate>();
+            _femaleCandidate = _firstCandidate.transform.GetComponent<FemaleCandidate>();
+            
+            _male = _maleCandidate;
+            _female = _femaleCandidate;
+            
             _isDeciding = true;
+            
             if (_isDeciding)
             {
                 candidateInformation.gameObject.SetActive(true);
@@ -142,7 +146,6 @@ namespace UI
                     else
                     {
                         candidatePhoto.sprite = candidatePhotoArray[MaleSprite];
-                        _firstCandidate.name = candidateManager.maleNames[Random.Range(0, candidateManager.maleNames.Length)];
                     }
                 }
                 else if (_female)
@@ -158,7 +161,6 @@ namespace UI
                     else
                     {
                         candidatePhoto.sprite = candidatePhotoArray[FemaleSprite];
-                        _firstCandidate.name = candidateManager.femaleNames[Random.Range(0, candidateManager.femaleNames.Length)];
                     }
                 }
                 candidateName.text = _firstCandidate.name;
@@ -169,9 +171,13 @@ namespace UI
         private void HiredCandidate()
         {
             candidateInformation.gameObject.SetActive(false);
+            fakeIDText.gameObject.SetActive(false);
+            
             gameManager.inMeeting = false;
             gameManager.isHired = true;
+            _isDeciding = false;
             _fakeCheck = false;
+            
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
             candidateMovement.HiredCandidateAnimation();
         }
@@ -179,9 +185,13 @@ namespace UI
         private void RejectedCandidate()
         {
             candidateInformation.gameObject.SetActive(false);
+            fakeIDText.gameObject.SetActive(false);
+            
             gameManager.inMeeting = false;
             gameManager.isRejected = true;
+            _isDeciding = false;
             _fakeCheck = false;
+            
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
             candidateMovement.RejectedCandidateAnimation();
         }

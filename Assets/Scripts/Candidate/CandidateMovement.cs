@@ -25,14 +25,13 @@ namespace Candidate
             _exitDoorLocation = exitDoor.transform.position;
         }
 
-        private IEnumerator Start()
-        {
-            yield return new WaitForEndOfFrame();
-            _firstCandidate = candidateInstantiate.allCandidates[0];
-        }
-
         private void Update()
         {
+            if (gameManager.isGameStarted)
+            {
+                _firstCandidate = candidateInstantiate.allCandidates[0];
+            }
+            
             if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired && !gameManager.isRejected)
             {
                 Movement();
@@ -40,19 +39,21 @@ namespace Candidate
 
             if (!HappyAnimEnded() && gameManager.isHired)
             {
-                _firstCandidate.transform.LookAt(exitDoor.transform.position);
+                _firstCandidate.transform.LookAt(_exitDoorLocation);
                 
                 _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
                     _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
+                CandidateStateChecker();
                 
             }
 
             if (!RejectedAnimEnded() && gameManager.isRejected)
             {
-                _firstCandidate.transform.LookAt(exitDoor.transform.position);
+                _firstCandidate.transform.LookAt(_exitDoorLocation);
                 
                 _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
                     _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
+                CandidateStateChecker();
             }
         }
 
@@ -64,7 +65,7 @@ namespace Candidate
                 chairToSit.transform.position, candidateManager.movementSpeed * Time.deltaTime);
 
             firstCandidateAnimator.runtimeAnimatorController = nonIdleAnimController;
-
+            
 
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
             {
@@ -82,11 +83,12 @@ namespace Candidate
                 }
             }
             WalkingAnimationManager();
-            
-            if (_firstCandidate.transform.position != chairToSit.transform.position) return;
-            firstCandidateAnimator.Play("Sitting");
-            gameManager.inMeeting = true;
-            ListOrganizer();
+
+            if (_firstCandidate.transform.position == chairToSit.transform.position)
+            {
+                firstCandidateAnimator.Play("Sitting");
+                gameManager.inMeeting = true;
+            }
         }
 
         private void WalkingAnimationManager()
@@ -139,12 +141,43 @@ namespace Candidate
             return x;
         }
         
+        private void CandidateStateChecker()
+        {
+            if (gameManager.isHired || gameManager.isRejected)
+            {
+                if (gameManager.isHired)
+                {
+                    if (_firstCandidate.transform.position == _exitDoorLocation)
+                    {
+                        gameManager.isHired = false;
+                        _firstCandidate.gameObject.SetActive(false);
+                        ListOrganizer();
+                    }
+                }
+                
+                if(gameManager.isRejected)
+                {
+                    if (_firstCandidate.transform.position == _exitDoorLocation)
+                    {
+                        gameManager.isRejected = false;
+                        _firstCandidate.gameObject.SetActive(false);
+                        ListOrganizer();
+                    }
+                }
+            }
+        }
+
         private void ListOrganizer()
         {
-            if (gameManager.inMeeting)
-            {
-                Debug.Log("IN MEETING LIST ORGANIZER");
-            }
+           if (candidateInstantiate.allCandidates.Count >= 2)
+           {
+               candidateInstantiate.allCandidates.RemoveAt(0);
+           }
+           else
+           {
+               Debug.LogWarning("EVERYONE MET");
+               gameManager.isGameStarted = false;
+           }
         }
     }
 }
