@@ -1,8 +1,6 @@
-using System;
 using System.Collections;
 using Candidate.ScriptableObjects;
 using Core;
-using TMPro.EditorUtilities;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -19,10 +17,12 @@ namespace Candidate
 
         private Quaternion _firstInLineRotation;
         private GameObject _firstCandidate;
+        private Vector3 _exitDoorLocation;
 
         private void Awake()
         {
             _firstInLineRotation = Quaternion.Euler(0f, 90f, 0f);
+            _exitDoorLocation = exitDoor.transform.position;
         }
 
         private IEnumerator Start()
@@ -33,7 +33,7 @@ namespace Candidate
 
         private void Update()
         {
-            if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired)
+            if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired && !gameManager.isRejected)
             {
                 Movement();
             }
@@ -41,8 +41,18 @@ namespace Candidate
             if (!HappyAnimEnded() && gameManager.isHired)
             {
                 _firstCandidate.transform.LookAt(exitDoor.transform.position);
+                
                 _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
-                    exitDoor.transform.position, candidateManager.movementSpeed * Time.deltaTime);
+                    _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
+                
+            }
+
+            if (!RejectedAnimEnded() && gameManager.isRejected)
+            {
+                _firstCandidate.transform.LookAt(exitDoor.transform.position);
+                
+                _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
+                    _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
             }
         }
 
@@ -94,18 +104,17 @@ namespace Candidate
             }
         }
 
-        private void ListOrganizer()
-        {
-            if (gameManager.inMeeting)
-            {
-                Debug.Log("IN MEETING LIST ORGANIZER");
-            }
-        }
 
-        public void HiredCandidateAnimation() //isHired true
+        public void HiredCandidateAnimation()
         {
             Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
             firstCandidateAnimator.Play("Happy");
+        }
+
+        public void RejectedCandidateAnimation()
+        {
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            firstCandidateAnimator.Play("Sad");
         }
 
         private bool HappyAnimEnded()
@@ -115,9 +124,27 @@ namespace Candidate
             {
                 x = _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Happy") &&
                     _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f;
-                Debug.Log(x);
             }
             return x;
+        }
+
+        private bool RejectedAnimEnded()
+        {
+            bool x = false;
+            if (gameManager.isRejected)
+            {
+                x = _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Sad") &&
+                    _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f;
+            }
+            return x;
+        }
+        
+        private void ListOrganizer()
+        {
+            if (gameManager.inMeeting)
+            {
+                Debug.Log("IN MEETING LIST ORGANIZER");
+            }
         }
     }
 }

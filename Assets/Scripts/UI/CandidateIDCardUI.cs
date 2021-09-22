@@ -180,8 +180,10 @@ namespace UI
         {
             candidateInformation.gameObject.SetActive(false);
             gameManager.inMeeting = false;
+            gameManager.isRejected = true;
             _fakeCheck = false;
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
+            candidateMovement.RejectedCandidateAnimation();
         }
     }
 }
