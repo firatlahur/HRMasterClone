@@ -214,12 +214,10 @@ namespace UI
                     maleCandidateStats.candidateSalaryExpectation > hireRulesUI.hiringSalaryInt ||
                     hiredCandidate.gameObject.layer == FakeCandidateLayer)
                 {
-                    Debug.Log("BAD MALE REGISTERED");
                     endDayReportUI.badHireNumber++;
                 }
                 else
                 {
-                    Debug.Log("GOOD MALE");
                     endDayReportUI.efficientHireNumber++;
                 }
 
@@ -233,12 +231,10 @@ namespace UI
                     femaleCandidateStats.candidateSalaryExpectation > hireRulesUI.hiringSalaryInt ||
                     hiredCandidate.gameObject.layer == FakeCandidateLayer)
                 {
-                    Debug.Log("BAD FEMALE REGISTERED");
                     endDayReportUI.badHireNumber++;
                 }
                 else
                 {
-                    Debug.Log("GOOD FEMALE");
                     endDayReportUI.efficientHireNumber++;
                 }
             }
