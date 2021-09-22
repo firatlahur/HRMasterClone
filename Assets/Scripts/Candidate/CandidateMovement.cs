@@ -1,7 +1,6 @@
-using System.Collections;
 using Candidate.ScriptableObjects;
 using Core;
-using UnityEditor.Animations;
+using UI;
 using UnityEngine;
 
 namespace Candidate
@@ -11,9 +10,10 @@ namespace Candidate
         public CandidateManager candidateManager;
         public CandidateInstantiate candidateInstantiate;
         public GameManager gameManager;
+        public EndDayReportUI endDayReportUI;
+        
         public GameObject chairToSit, exitDoor;
-
-        public AnimatorController nonIdleAnimController;
+        public RuntimeAnimatorController nonIdleAnimController;
 
         private Quaternion _firstInLineRotation;
         private GameObject _firstCandidate;
@@ -77,31 +77,33 @@ namespace Candidate
                         candidatesInLine.transform.position, Vector3.zero,
                         candidateManager.movementSpeed * Time.deltaTime);
                 }
-                else
-                {
-                    candidatesInLine.transform.rotation = _firstInLineRotation;
-                }
             }
-            WalkingAnimationManager();
 
             if (_firstCandidate.transform.position == chairToSit.transform.position)
             {
                 firstCandidateAnimator.Play("Sitting");
                 gameManager.inMeeting = true;
             }
+            WalkingAnimationManager();
         }
 
         private void WalkingAnimationManager()
         {
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
             {
-               Animator[] animator = candidateInstantiate.allCandidates[i].transform.GetComponents<Animator>();
+                Animator[] animator = candidateInstantiate.allCandidates[i].transform.GetComponents<Animator>();
 
                 foreach (Animator anim in animator)
                 {
-                    anim.Play(candidateInstantiate.allCandidates[1].transform.position != Vector3.zero
-                        ? "Walking"
-                        : "Idle");
+                    if (!gameManager.inMeeting)
+                    {
+                        anim.Play("Walking");
+                    }
+                    else
+                    {
+                        candidateInstantiate.allCandidates[1].transform.rotation = _firstInLineRotation;
+                        anim.Play("Idle");
+                    }
                 }
             }
         }
@@ -109,12 +111,18 @@ namespace Candidate
 
         public void HiredCandidateAnimation()
         {
+            Vector3 pose = new Vector3(.55f, 0, 0);
+            _firstCandidate.transform.position += pose;
+            
             Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
             firstCandidateAnimator.Play("Happy");
         }
 
         public void RejectedCandidateAnimation()
         {
+            Vector3 pose = new Vector3(.55f, 0, 0);
+            _firstCandidate.transform.position += pose;
+
             Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
             firstCandidateAnimator.Play("Sad");
         }
@@ -175,7 +183,7 @@ namespace Candidate
            }
            else
            {
-               Debug.LogWarning("EVERYONE MET");
+               endDayReportUI.CallLastReport();
                gameManager.isGameStarted = false;
            }
         }
