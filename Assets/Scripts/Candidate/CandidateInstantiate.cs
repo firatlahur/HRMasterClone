@@ -45,8 +45,8 @@ namespace Candidate
               {
                   candidate.transform.position += _candidateSpawnOffset;
                   candidate.transform.rotation = _inLineRotation;
-                  _candidateSpawnOffset.x--;
-                  _candidateSpawnOffset.z++;
+                  _candidateSpawnOffset.x -= .55f;
+                  _candidateSpawnOffset.z += .52f;
               }
               allCandidates.Add(candidate);
               candidate.transform.SetParent(candidateContainer.transform);
