@@ -1,6 +1,6 @@
-using System.Collections;
 using Candidate.ScriptableObjects;
 using Core;
+using UI;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -11,8 +11,9 @@ namespace Candidate
         public CandidateManager candidateManager;
         public CandidateInstantiate candidateInstantiate;
         public GameManager gameManager;
+        public EndDayReportUI endDayReportUI;
+        
         public GameObject chairToSit, exitDoor;
-
         public AnimatorController nonIdleAnimController;
 
         private Quaternion _firstInLineRotation;
@@ -176,6 +177,7 @@ namespace Candidate
            else
            {
                Debug.LogWarning("EVERYONE MET");
+               endDayReportUI.CallLastReport();
                gameManager.isGameStarted = false;
            }
         }

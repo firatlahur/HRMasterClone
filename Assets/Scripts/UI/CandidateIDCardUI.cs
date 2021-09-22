@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using Candidate;
 using Candidate.ScriptableObjects;
 using Core;
@@ -14,18 +13,21 @@ namespace UI
         public CandidateInstantiate candidateInstantiate;
         public CandidateMovement candidateMovement;
         public CandidateManager candidateManager;
+        public EndDayReportUI endDayReportUI;
+        public HireRulesUI hireRulesUI;
         public GameManager gameManager;
-        
+
         public Sprite[] candidatePhotoArray;
         public Text candidateName, candidatePosition, candidateExperience, candidateSalary, fakeIDText;
         public Image candidateInformation, candidatePhoto;
 
         private const int MaleSprite = 0;
         private const int FemaleSprite = 1;
-        
+        private const int FakeCandidateLayer = 6;
+
         private GameObject _firstCandidate;
         private Vector2 _candidateInfoDefaultPosition;
-        
+
         private MaleCandidate _maleCandidate;
         private FemaleCandidate _femaleCandidate;
 
@@ -64,7 +66,7 @@ namespace UI
                         candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
                         Space.World);
                 }
-                    
+
                 if (Input.GetTouch(0).deltaPosition.x < 0)
                 {
                     candidateInformation.transform.Translate(
@@ -93,21 +95,21 @@ namespace UI
                 }
             }
         }
-        
+
         private void SetCardInformation()
         {
             _maleCandidate = _firstCandidate.transform.GetComponent<MaleCandidate>();
             _femaleCandidate = _firstCandidate.transform.GetComponent<FemaleCandidate>();
-            
+
             _male = _maleCandidate;
             _female = _femaleCandidate;
-            
+
             _isDeciding = true;
-            
+
             if (_isDeciding)
             {
                 candidateInformation.gameObject.SetActive(true);
-                
+
                 if (_male)
                 {
                     candidateExperience.text = "+" + _maleCandidate.candidateExperience + " Years";
@@ -138,9 +140,10 @@ namespace UI
                     if (Random.Range(0, 100) > 85)
                     {
                         candidatePhoto.sprite = candidatePhotoArray[FemaleSprite];
-                        
+
                         _firstCandidate.name =
                             candidateManager.femaleNames[Random.Range(0, candidateManager.femaleNames.Length)];
+                        _firstCandidate.gameObject.layer = FakeCandidateLayer;
                         fakeIDText.gameObject.SetActive(true);
                     }
                     else
@@ -153,9 +156,10 @@ namespace UI
                     if (Random.Range(0, 100) > 85)
                     {
                         candidatePhoto.sprite = candidatePhotoArray[MaleSprite];
-                        
+
                         _firstCandidate.name =
                             candidateManager.maleNames[Random.Range(0, candidateManager.maleNames.Length)];
+                        _firstCandidate.gameObject.layer = FakeCandidateLayer;
                         fakeIDText.gameObject.SetActive(true);
                     }
                     else
@@ -163,6 +167,7 @@ namespace UI
                         candidatePhoto.sprite = candidatePhotoArray[FemaleSprite];
                     }
                 }
+
                 candidateName.text = _firstCandidate.name;
                 _fakeCheck = true;
             }
@@ -172,28 +177,71 @@ namespace UI
         {
             candidateInformation.gameObject.SetActive(false);
             fakeIDText.gameObject.SetActive(false);
-            
+
+            HiredCandidateEfficiency(_firstCandidate);
+
             gameManager.inMeeting = false;
             gameManager.isHired = true;
             _isDeciding = false;
             _fakeCheck = false;
-            
+
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
             candidateMovement.HiredCandidateAnimation();
         }
-        
+
         private void RejectedCandidate()
         {
             candidateInformation.gameObject.SetActive(false);
             fakeIDText.gameObject.SetActive(false);
-            
+
             gameManager.inMeeting = false;
             gameManager.isRejected = true;
             _isDeciding = false;
             _fakeCheck = false;
-            
+
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
             candidateMovement.RejectedCandidateAnimation();
+        }
+
+        private void HiredCandidateEfficiency(GameObject hiredCandidate)
+        {
+            if (hiredCandidate.GetComponent<MaleCandidate>())
+            {
+                MaleCandidate maleCandidateStats = hiredCandidate.GetComponent<MaleCandidate>();
+
+                if (maleCandidateStats.candidateWorkPosition != hireRulesUI.hiringPositionString ||
+                    maleCandidateStats.candidateExperience < hireRulesUI.hiringExpInt ||
+                    maleCandidateStats.candidateSalaryExpectation > hireRulesUI.hiringSalaryInt ||
+                    hiredCandidate.gameObject.layer == FakeCandidateLayer)
+                {
+                    Debug.Log("BAD MALE REGISTERED");
+                    endDayReportUI.badHireNumber++;
+                }
+                else
+                {
+                    Debug.Log("GOOD MALE");
+                    endDayReportUI.efficientHireNumber++;
+                }
+
+            }
+            else if (hiredCandidate.GetComponent<FemaleCandidate>())
+            {
+                FemaleCandidate femaleCandidateStats = hiredCandidate.GetComponent<FemaleCandidate>();
+
+                if (femaleCandidateStats.candidateWorkPosition != hireRulesUI.hiringPositionString ||
+                    femaleCandidateStats.candidateExperience < hireRulesUI.hiringExpInt ||
+                    femaleCandidateStats.candidateSalaryExpectation > hireRulesUI.hiringSalaryInt ||
+                    hiredCandidate.gameObject.layer == FakeCandidateLayer)
+                {
+                    Debug.Log("BAD FEMALE REGISTERED");
+                    endDayReportUI.badHireNumber++;
+                }
+                else
+                {
+                    Debug.Log("GOOD FEMALE");
+                    endDayReportUI.efficientHireNumber++;
+                }
+            }
         }
     }
 }

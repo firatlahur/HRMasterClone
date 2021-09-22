@@ -11,20 +11,27 @@ namespace UI
         public HireRules hireRules;
         public GameManager gameManager;
         
-        public Text hiringPositionTop, hiringExpTop, hiringSalaryTop;
+        public Text hiringPosition, hiringExp, hiringSalary;
         public Text hiringPositionBottom, hiringExpBottom, hiringSalaryBottom;
 
         public Image hiringRulesTop, hiringRulesBottom;
 
+        public string hiringPositionString;
+        public int hiringSalaryInt, hiringExpInt;
+
         private void Start()
         {
-            hiringPositionTop.text = hireRules.hiringPositions[Random.Range(0, hireRules.hiringPositions.Length)];
-            hiringExpTop.text = "+" + Random.Range(hireRules.minExpYears, hireRules.maxExpYears) + " Years";
-            hiringSalaryTop.text = Random.Range(hireRules.minSalaryDollars, hireRules.maxSalaryDollars) + "$";
+            hiringPositionString = hireRules.hiringPositions[Random.Range(0, hireRules.hiringPositions.Length)];
+            hiringSalaryInt = Random.Range(hireRules.minSalaryDollars, hireRules.maxSalaryDollars);
+            hiringExpInt = Random.Range(hireRules.minExpYears, hireRules.maxExpYears);
+                
+            hiringPosition.text = hiringPositionString;
+            hiringExp.text = "+" + hiringExpInt + " Years";
+            hiringSalary.text = hiringSalaryInt + "$";
 
-            hiringPositionBottom.text = hiringPositionTop.text;
-            hiringExpBottom.text = hiringExpTop.text;
-            hiringSalaryBottom.text = hiringSalaryTop.text;
+            hiringPositionBottom.text = hiringPosition.text;
+            hiringExpBottom.text = hiringExp.text;
+            hiringSalaryBottom.text = hiringSalary.text;
         }
 
         public void GameStartButton()
