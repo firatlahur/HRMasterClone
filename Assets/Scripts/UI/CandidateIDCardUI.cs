@@ -11,6 +11,7 @@ namespace UI
     public class CandidateIDCardUI : MonoBehaviour
     {
         public CandidateInstantiate candidateInstantiate;
+        public CandidateMovement candidateMovement;
         public CandidateManager candidateManager;
         public GameManager gameManager;
         
@@ -27,7 +28,7 @@ namespace UI
         private MaleCandidate _maleCandidate;
         private FemaleCandidate _femaleCandidate;
 
-        private bool _male, _female, _fakeCheck, _isDeciding;// _isHired, _isRejected;
+        private bool _male, _female, _fakeCheck, _isDeciding;
 
         private IEnumerator Start()
         {
@@ -52,41 +53,46 @@ namespace UI
 
             if (Input.touchCount > 0 && candidateInformation.IsActive())
             {
-                if (gameManager.inMeeting && Input.GetTouch(0).phase == TouchPhase.Moved)
+                TouchMovement();
+            }
+        }
+
+        private void TouchMovement()
+        {
+            if (gameManager.inMeeting && Input.GetTouch(0).phase == TouchPhase.Moved)
+            {
+                if (Input.GetTouch(0).deltaPosition.x > 0)
                 {
-                    if (Input.GetTouch(0).deltaPosition.x > 0)
-                    {
-                        candidateInformation.transform.Translate(
-                            candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
-                            Space.World);
-                    }
+                    candidateInformation.transform.Translate(
+                        candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
+                        Space.World);
+                }
                     
-                    if (Input.GetTouch(0).deltaPosition.x < 0)
-                    {
-                        candidateInformation.transform.Translate(
-                            -candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
-                            Space.World);
-                    }
+                if (Input.GetTouch(0).deltaPosition.x < 0)
+                {
+                    candidateInformation.transform.Translate(
+                        -candidateInformation.transform.position * gameManager.idCardDragSpeed * Time.deltaTime,
+                        Space.World);
+                }
+            }
+
+            if (_isDeciding && Input.GetTouch(0).phase == TouchPhase.Ended)
+            {
+                bool hiredAxisCheck = candidateInformation.rectTransform.anchoredPosition.x > -50f;
+
+                if (candidateInformation.rectTransform.anchoredPosition.x < 75f && hiredAxisCheck)
+                {
+                    candidateInformation.transform.position = _candidateInfoDefaultPosition;
                 }
 
-                if (_isDeciding && Input.GetTouch(0).phase == TouchPhase.Ended)
+                if (candidateInformation.rectTransform.anchoredPosition.x > 75f)
                 {
-                    bool hiredAxisCheck = candidateInformation.rectTransform.anchoredPosition.x > -50f;
+                    HiredCandidate();
+                }
 
-                    if (candidateInformation.rectTransform.anchoredPosition.x < 75f && hiredAxisCheck)
-                    {
-                        candidateInformation.transform.position = _candidateInfoDefaultPosition;
-                    }
-
-                    if (candidateInformation.rectTransform.anchoredPosition.x > 75f)
-                    {
-                        HiredCandidate();
-                    }
-
-                    if (Input.GetTouch(0).deltaPosition.x < 0 && !hiredAxisCheck)
-                    {
-                        RejectedCandidate();
-                    }
+                if (Input.GetTouch(0).deltaPosition.x < 0 && !hiredAxisCheck)
+                {
+                    RejectedCandidate();
                 }
             }
         }
@@ -164,8 +170,10 @@ namespace UI
         {
             candidateInformation.gameObject.SetActive(false);
             gameManager.inMeeting = false;
+            gameManager.isHired = true;
             _fakeCheck = false;
             candidateInformation.transform.position = _candidateInfoDefaultPosition;
+            candidateMovement.HiredCandidateAnimation();
         }
         
         private void RejectedCandidate()

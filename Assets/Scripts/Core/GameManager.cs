@@ -4,8 +4,8 @@ namespace Core
 {
     public class GameManager : MonoBehaviour
     {
-       [HideInInspector] public bool isGameStarted, inMeeting;
+       [HideInInspector] public bool isGameStarted, inMeeting, isHired;
 
-       public float idCardValidDragOffset, idCardDragSpeed;
+       public float idCardDragSpeed;
     }
 }

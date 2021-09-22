@@ -1,5 +1,8 @@
+using System;
+using System.Collections;
 using Candidate.ScriptableObjects;
 using Core;
+using TMPro.EditorUtilities;
 using UnityEditor.Animations;
 using UnityEngine;
 
@@ -15,27 +18,39 @@ namespace Candidate
         public AnimatorController nonIdleAnimController;
 
         private Quaternion _firstInLineRotation;
+        private GameObject _firstCandidate;
 
         private void Awake()
         {
             _firstInLineRotation = Quaternion.Euler(0f, 90f, 0f);
+        }
 
+        private IEnumerator Start()
+        {
+            yield return new WaitForEndOfFrame();
+            _firstCandidate = candidateInstantiate.allCandidates[0];
         }
 
         private void Update()
         {
-            if (gameManager.isGameStarted && !gameManager.inMeeting)
+            if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired)
             {
                 Movement();
+            }
+
+            if (!HappyAnimEnded() && gameManager.isHired)
+            {
+                _firstCandidate.transform.LookAt(exitDoor.transform.position);
+                _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
+                    exitDoor.transform.position, candidateManager.movementSpeed * Time.deltaTime);
             }
         }
 
         private void Movement()
         {
-            GameObject firstCandidate = candidateInstantiate.allCandidates[0];
-            Animator firstCandidateAnimator = firstCandidate.GetComponent<Animator>();
-
-            firstCandidate.transform.position = Vector3.MoveTowards(firstCandidate.transform.position,
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            
+            _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
                 chairToSit.transform.position, candidateManager.movementSpeed * Time.deltaTime);
 
             firstCandidateAnimator.runtimeAnimatorController = nonIdleAnimController;
@@ -56,15 +71,15 @@ namespace Candidate
                     candidatesInLine.transform.rotation = _firstInLineRotation;
                 }
             }
-            AnimationManager();
+            WalkingAnimationManager();
             
-            if (firstCandidate.transform.position != chairToSit.transform.position) return;
+            if (_firstCandidate.transform.position != chairToSit.transform.position) return;
             firstCandidateAnimator.Play("Sitting");
             gameManager.inMeeting = true;
             ListOrganizer();
         }
 
-        private void AnimationManager()
+        private void WalkingAnimationManager()
         {
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
             {
@@ -85,6 +100,24 @@ namespace Candidate
             {
                 Debug.Log("IN MEETING LIST ORGANIZER");
             }
+        }
+
+        public void HiredCandidateAnimation() //isHired true
+        {
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            firstCandidateAnimator.Play("Happy");
+        }
+
+        private bool HappyAnimEnded()
+        {
+            bool x = false;
+            if (gameManager.isHired)
+            {
+                x = _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Happy") &&
+                    _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f;
+                Debug.Log(x);
+            }
+            return x;
         }
     }
 }
