@@ -16,8 +16,8 @@ namespace UI
 
         public Image hiringRulesTop, hiringRulesBottom;
 
-        public string hiringPositionString;
-        public int hiringSalaryInt, hiringExpInt;
+       [HideInInspector] public string hiringPositionString;
+       [HideInInspector] public int hiringSalaryInt, hiringExpInt;
 
         private void Start()
         {
