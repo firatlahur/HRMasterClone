@@ -1,3 +1,4 @@
+using System.Collections;
 using Candidate.ScriptableObjects;
 using Core;
 using UnityEditor.Animations;
@@ -15,31 +16,56 @@ namespace Candidate
         public AnimatorController nonIdleAnimController;
 
         private Quaternion _firstInLineRotation;
+        private GameObject _firstCandidate;
+        private Vector3 _exitDoorLocation;
 
         private void Awake()
         {
             _firstInLineRotation = Quaternion.Euler(0f, 90f, 0f);
-
+            _exitDoorLocation = exitDoor.transform.position;
         }
 
         private void Update()
         {
-            if (gameManager.isGameStarted && !gameManager.inMeeting)
+            if (gameManager.isGameStarted)
+            {
+                _firstCandidate = candidateInstantiate.allCandidates[0];
+            }
+            
+            if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired && !gameManager.isRejected)
             {
                 Movement();
+            }
+
+            if (!HappyAnimEnded() && gameManager.isHired)
+            {
+                _firstCandidate.transform.LookAt(_exitDoorLocation);
+                
+                _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
+                    _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
+                CandidateStateChecker();
+                
+            }
+
+            if (!RejectedAnimEnded() && gameManager.isRejected)
+            {
+                _firstCandidate.transform.LookAt(_exitDoorLocation);
+                
+                _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
+                    _exitDoorLocation, candidateManager.movementSpeed * Time.deltaTime);
+                CandidateStateChecker();
             }
         }
 
         private void Movement()
         {
-            GameObject firstCandidate = candidateInstantiate.allCandidates[0];
-            Animator firstCandidateAnimator = firstCandidate.GetComponent<Animator>();
-
-            firstCandidate.transform.position = Vector3.MoveTowards(firstCandidate.transform.position,
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            
+            _firstCandidate.transform.position = Vector3.MoveTowards(_firstCandidate.transform.position,
                 chairToSit.transform.position, candidateManager.movementSpeed * Time.deltaTime);
 
             firstCandidateAnimator.runtimeAnimatorController = nonIdleAnimController;
-
+            
 
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
             {
@@ -56,15 +82,16 @@ namespace Candidate
                     candidatesInLine.transform.rotation = _firstInLineRotation;
                 }
             }
-            AnimationManager();
-            
-            if (firstCandidate.transform.position != chairToSit.transform.position) return;
-            firstCandidateAnimator.Play("Sitting");
-            gameManager.inMeeting = true;
-            ListOrganizer();
+            WalkingAnimationManager();
+
+            if (_firstCandidate.transform.position == chairToSit.transform.position)
+            {
+                firstCandidateAnimator.Play("Sitting");
+                gameManager.inMeeting = true;
+            }
         }
 
-        private void AnimationManager()
+        private void WalkingAnimationManager()
         {
             for (int i = 1; i < candidateInstantiate.allCandidates.Count; i++)
             {
@@ -79,12 +106,78 @@ namespace Candidate
             }
         }
 
+
+        public void HiredCandidateAnimation()
+        {
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            firstCandidateAnimator.Play("Happy");
+        }
+
+        public void RejectedCandidateAnimation()
+        {
+            Animator firstCandidateAnimator = _firstCandidate.GetComponent<Animator>();
+            firstCandidateAnimator.Play("Sad");
+        }
+
+        private bool HappyAnimEnded()
+        {
+            bool x = false;
+            if (gameManager.isHired)
+            {
+                x = _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Happy") &&
+                    _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f;
+            }
+            return x;
+        }
+
+        private bool RejectedAnimEnded()
+        {
+            bool x = false;
+            if (gameManager.isRejected)
+            {
+                x = _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("Sad") &&
+                    _firstCandidate.transform.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).normalizedTime <= 1.0f;
+            }
+            return x;
+        }
+        
+        private void CandidateStateChecker()
+        {
+            if (gameManager.isHired || gameManager.isRejected)
+            {
+                if (gameManager.isHired)
+                {
+                    if (_firstCandidate.transform.position == _exitDoorLocation)
+                    {
+                        gameManager.isHired = false;
+                        _firstCandidate.gameObject.SetActive(false);
+                        ListOrganizer();
+                    }
+                }
+                
+                if(gameManager.isRejected)
+                {
+                    if (_firstCandidate.transform.position == _exitDoorLocation)
+                    {
+                        gameManager.isRejected = false;
+                        _firstCandidate.gameObject.SetActive(false);
+                        ListOrganizer();
+                    }
+                }
+            }
+        }
+
         private void ListOrganizer()
         {
-            if (gameManager.inMeeting)
-            {
-                Debug.Log("IN MEETING LIST ORGANIZER");
-            }
+           if (candidateInstantiate.allCandidates.Count >= 2)
+           {
+               candidateInstantiate.allCandidates.RemoveAt(0);
+           }
+           else
+           {
+               Debug.LogWarning("EVERYONE MET");
+               gameManager.isGameStarted = false;
+           }
         }
     }
 }
