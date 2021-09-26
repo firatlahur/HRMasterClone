@@ -2074,6 +2074,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   candidateManager: {fileID: 11400000, guid: 60b1a9a2ff9d5cf4e921d6936cd974ad, type: 2}
   hireRules: {fileID: 11400000, guid: 8bae016ff5e0da049a352270d55d3fef, type: 2}
+  hiringContainer: {fileID: 11400000, guid: 486272bf1696100458bd9b538ad049eb, type: 2}
   candidateWorkPosition: 
   candidateExperience: 0
   candidateSalaryExpectation: 0
