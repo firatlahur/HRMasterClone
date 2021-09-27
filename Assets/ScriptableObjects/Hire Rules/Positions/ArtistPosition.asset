@@ -17,7 +17,7 @@ MonoBehaviour:
   - 2D Artist
   - UI/UX Artist
   - Animation Artist
-  minExpYears: 0
-  maxExpYears: 0
-  minSalaryDollars: 0
-  maxSalaryDollars: 0
+  minExpYears: 5
+  maxExpYears: 10
+  minSalaryDollars: 5000
+  maxSalaryDollars: 10000

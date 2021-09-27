@@ -12,4 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 48378444303b2014294182eed085f537, type: 3}
   m_Name: Job Categories Container
   m_EditorClassIdentifier: 
-  jobCategories: []
+  jobCategories:
+  - {fileID: 11400000, guid: 8bae016ff5e0da049a352270d55d3fef, type: 2}
+  - {fileID: 11400000, guid: f28dd03f4e08f7e4480a92e232523c10, type: 2}
+  - {fileID: 11400000, guid: 47d3adb0288092048821a39e88cb384a, type: 2}

@@ -14,18 +14,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   candidates:
   - {fileID: 5894767742486684898, guid: 46490e392041e4e4e9cb55474a071c28, type: 3}
-  - {fileID: 1450513637752705166, guid: 174a157a6d071164e8d8d1baf5657d5a, type: 3}
+  - {fileID: 6867620221192795947, guid: 174a157a6d071164e8d8d1baf5657d5a, type: 3}
   candidatesToSpawn: 10
   movementSpeed: 1.5
   maleNames:
-  - male1
-  - male2
-  - male3
-  - male4
-  - male5
+  - Jim
+  - Dwight
+  - Stanley
+  - Kevin
+  - Creed
   femaleNames:
-  - female1
-  - female2
-  - female3
-  - female4
-  - female5
+  - Pam
+  - Meredith
+  - Angela
+  - Phyllis
+  - Kelly

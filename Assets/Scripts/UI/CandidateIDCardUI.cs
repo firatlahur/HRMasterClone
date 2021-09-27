@@ -10,6 +10,8 @@ namespace UI
 {
     public class CandidateIDCardUI : MonoBehaviour
     {
+        public HiredCandidateDetailsPrefab hiredCandidateDetailsPrefab;
+        public HiredCandidateManagerUI hiredCandidateManagerUI;
         public CandidateInstantiate candidateInstantiate;
         public CandidateMovement candidateMovement;
         public CandidateManager candidateManager;
@@ -179,6 +181,8 @@ namespace UI
             fakeIDText.gameObject.SetActive(false);
 
             HiredCandidateEfficiency(_firstCandidate);
+            hiredCandidateDetailsPrefab.SetEmployeeDetails(_firstCandidate);
+            hiredCandidateManagerUI.SaveHiredCandidate(_firstCandidate);
 
             gameManager.inMeeting = false;
             gameManager.isHired = true;

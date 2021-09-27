@@ -8,7 +8,6 @@ namespace Candidate
     public class FemaleCandidate : MonoBehaviour
     {
         public CandidateManager candidateManager;
-        public HireRules hireRules;
         public HiringContainer hiringContainer;
         public GameManager gameManager;
        

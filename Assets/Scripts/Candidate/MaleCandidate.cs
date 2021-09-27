@@ -12,7 +12,6 @@ namespace Candidate
         public CandidateManager candidateManager;
         public GameManager gameManager;
         
-        public HireRules hireRules;
         public HiringContainer hiringContainer;
 
         [HideInInspector]public string candidateWorkPosition;

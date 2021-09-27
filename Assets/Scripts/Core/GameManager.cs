@@ -12,7 +12,7 @@ namespace Core
        public float idCardDragSpeed;
        
        [HideInInspector]public int selectedJobCategory;
-       [HideInInspector] public bool isGameStarted, inMeeting, isHired, isRejected;
+       [HideInInspector]public bool isGameStarted, inMeeting, isHired, isRejected, canMove;
 
        private void Start()
        {
