@@ -8,7 +8,7 @@ namespace UI
 {
     public class HireRulesUI : MonoBehaviour
     {
-        public HireRules hireRules;
+        public HiringContainer hiringContainer;
         public GameManager gameManager;
         
         public Text hiringPosition, hiringExp, hiringSalary;
@@ -21,17 +21,23 @@ namespace UI
 
         private void Start()
         {
-            hiringPositionString = hireRules.hiringPositions[Random.Range(0, hireRules.hiringPositions.Length)];
-            hiringSalaryInt = Random.Range(hireRules.minSalaryDollars, hireRules.maxSalaryDollars);
-            hiringExpInt = Random.Range(hireRules.minExpYears, hireRules.maxExpYears);
-                
-            hiringPosition.text = hiringPositionString;
-            hiringExp.text = "+" + hiringExpInt + " Years";
-            hiringSalary.text = hiringSalaryInt + "$";
+            hiringPositionString = hiringContainer.jobCategories[gameManager.selectedJobCategory]
+                .hiringPositions[
+                    Random.Range(0, hiringContainer.jobCategories[gameManager.selectedJobCategory].hiringPositions.Length)];
 
-            hiringPositionBottom.text = hiringPosition.text;
-            hiringExpBottom.text = hiringExp.text;
-            hiringSalaryBottom.text = hiringSalary.text;
+            hiringSalaryInt = Random.Range(hiringContainer.jobCategories[gameManager.selectedJobCategory].minSalaryDollars,
+                hiringContainer.jobCategories[gameManager.selectedJobCategory].maxSalaryDollars);
+
+            hiringExpInt = Random.Range(hiringContainer.jobCategories[gameManager.selectedJobCategory].minExpYears,
+                hiringContainer.jobCategories[gameManager.selectedJobCategory].maxExpYears);
+            
+             hiringPosition.text = hiringPositionString;
+             hiringExp.text = "+" + hiringExpInt + " Years";
+             hiringSalary.text = hiringSalaryInt + "$";
+            
+             hiringPositionBottom.text = hiringPosition.text;
+             hiringExpBottom.text = hiringExp.text;
+             hiringSalaryBottom.text = hiringSalary.text;
         }
 
         public void GameStartButton()

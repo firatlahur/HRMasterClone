@@ -25,6 +25,13 @@ namespace Candidate
             _exitDoorLocation = exitDoor.transform.position;
         }
 
+        private bool PlayerCanMove()
+        {
+            bool canMove = gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired && !gameManager.isRejected;
+            return canMove;
+        }
+        
+        
         private void Update()
         {
             if (gameManager.isGameStarted)
@@ -32,7 +39,7 @@ namespace Candidate
                 _firstCandidate = candidateInstantiate.allCandidates[0];
             }
             
-            if (gameManager.isGameStarted && !gameManager.inMeeting && !gameManager.isHired && !gameManager.isRejected)
+            if (PlayerCanMove())
             {
                 Movement();
             }
