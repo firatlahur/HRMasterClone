@@ -1,36 +1,35 @@
-using System;
-using System.Collections;
-using Candidate;
+using System.IO;
+using Core;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace UI
 {
     public class HiredCandidateManagerUI : MonoBehaviour
     {
+        public GameManager gameManager;
+        
         public GameObject hiredCandidateDetails;
         public RectTransform content;
 
-        private int _totalEmployeeNumber = 1;
         private float _employeeUIOffset;
+        private int _totalEmployee;
 
         private void Awake()
         {
-            _totalEmployeeNumber = 1;
             _employeeUIOffset += 200f;
+            _totalEmployee = 1;
         }
 
-        public void SaveHiredCandidate(GameObject hiredCandidate)
+        public void InstantiateUIid()
         {
            Instantiate(hiredCandidateDetails, content.transform, false);
         }
 
         public void ContentSizeManager()
         {
-            Debug.Log("AAA");
-            _totalEmployeeNumber++;
+            _totalEmployee++;
             
-            if (_totalEmployeeNumber > 1)
+            if (_totalEmployee > 1)
             {
                 content.sizeDelta += new Vector2(0, _employeeUIOffset);
             }

@@ -10,9 +10,9 @@ namespace Core
        public HiringContainer hiringContainer;
 
        public float idCardDragSpeed;
-       
-       [HideInInspector]public int selectedJobCategory;
-       [HideInInspector]public bool isGameStarted, inMeeting, isHired, isRejected, canMove;
+
+       [HideInInspector] public int selectedJobCategory;
+       [HideInInspector]public bool isGameStarted, inMeeting, isHired, isRejected;
 
        private void Start()
        {

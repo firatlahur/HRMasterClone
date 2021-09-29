@@ -449,6 +449,7 @@ GameObject:
   m_Component:
   - component: {fileID: 250431951}
   - component: {fileID: 250431950}
+  - component: {fileID: 250431952}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -475,7 +476,6 @@ MonoBehaviour:
   inMeeting: 0
   isHired: 0
   isRejected: 0
-  canMove: 0
 --- !u!4 &250431951
 Transform:
   m_ObjectHideFlags: 0
@@ -490,6 +490,19 @@ Transform:
   m_Father: {fileID: 1169259994}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &250431952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 250431949}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44078b7580be52446a29c79f5eb71537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  content: {fileID: 999069497}
 --- !u!1 &267722442
 GameObject:
   m_ObjectHideFlags: 0
@@ -2041,6 +2054,7 @@ GameObject:
   m_Component:
   - component: {fileID: 999069495}
   - component: {fileID: 999069496}
+  - component: {fileID: 999069497}
   m_Layer: 5
   m_Name: Content
   m_TagString: Untagged
@@ -2093,6 +2107,23 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &999069497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999069494}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b1c887e055134349b991707a3040279, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  childCount: 0
+  height: 180
+  hiredCandidateDetailsPrefab: {fileID: 7330517682681769771, guid: daf18d488c8d4dd40bc495f184cf73ac, type: 3}
+  childEmployeeDetails: []
+  childEmployeeSprites: []
 --- !u!1 &1103984675
 GameObject:
   m_ObjectHideFlags: 0
@@ -3615,6 +3646,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hiredCandidateDetailsPrefab: {fileID: 6342490624317583082, guid: daf18d488c8d4dd40bc495f184cf73ac, type: 3}
+  scrollViewContentDetailsUI: {fileID: 999069497}
   hiredCandidateManagerUI: {fileID: 1600835191}
   candidateInstantiate: {fileID: 1103984677}
   candidateMovement: {fileID: 1103984678}
@@ -3663,6 +3695,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fd24fe85146ffd46a8490481a565344, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  gameManager: {fileID: 250431950}
   hiredCandidateDetails: {fileID: 7330517682681769771, guid: daf18d488c8d4dd40bc495f184cf73ac, type: 3}
   content: {fileID: 999069495}
 --- !u!1 &1608495762

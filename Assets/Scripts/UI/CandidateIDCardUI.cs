@@ -1,4 +1,3 @@
-using System;
 using Candidate;
 using Candidate.ScriptableObjects;
 using Core;
@@ -11,6 +10,7 @@ namespace UI
     public class CandidateIDCardUI : MonoBehaviour
     {
         public HiredCandidateDetailsPrefab hiredCandidateDetailsPrefab;
+        public ScrollViewContentDetailsUI scrollViewContentDetailsUI;
         public HiredCandidateManagerUI hiredCandidateManagerUI;
         public CandidateInstantiate candidateInstantiate;
         public CandidateMovement candidateMovement;
@@ -182,7 +182,7 @@ namespace UI
 
             HiredCandidateEfficiency(_firstCandidate);
             hiredCandidateDetailsPrefab.SetEmployeeDetails(_firstCandidate);
-            hiredCandidateManagerUI.SaveHiredCandidate(_firstCandidate);
+            hiredCandidateManagerUI.InstantiateUIid();
 
             gameManager.inMeeting = false;
             gameManager.isHired = true;
