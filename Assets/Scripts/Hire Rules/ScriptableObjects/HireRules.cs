@@ -8,7 +8,6 @@ namespace Hire_Rules.ScriptableObjects
     {
         public string[] hiringPositions;
         public int minExpYears, maxExpYears, minSalaryDollars, maxSalaryDollars;
-
-
+        
     }
 }

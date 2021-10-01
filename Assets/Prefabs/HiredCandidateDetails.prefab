@@ -391,19 +391,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7330517681860195176}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 5327468489432926467}
-        m_TargetAssemblyTypeName: UI.FireEmployeeButtonUI, Assembly-CSharp
-        m_MethodName: FireEmployee
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &7330517681918011616
 GameObject:
   m_ObjectHideFlags: 0
@@ -876,7 +864,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7330517682681769748}
   - component: {fileID: 6342490624317583082}
-  - component: {fileID: 5327468489432926467}
   m_Layer: 5
   m_Name: HiredCandidateDetails
   m_TagString: Untagged
@@ -927,7 +914,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hiredCandidateManagerUI: {fileID: 0}
-  scrollViewContentDetailsUI: {fileID: 0}
   employeeImage: {fileID: 7330517681291634567}
   employeeName: {fileID: 7330517681918011618}
   employeeDepartment: {fileID: 7330517683023015574}
@@ -936,20 +922,6 @@ MonoBehaviour:
   candidatePhotoArray:
   - {fileID: 21300000, guid: e29e27962bc15cd4e935e2ac40dce2ed, type: 3}
   - {fileID: 21300000, guid: c841eec0f7728304ea63512c49119814, type: 3}
---- !u!114 &5327468489432926467
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7330517682681769771}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb5a21f386b1c614896a7bf1a6000c1d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  employeeDetails: {fileID: 6342490624317583082}
-  scpObjSaveData: {fileID: 11400000, guid: a4e29d7491de210449c755629b01c460, type: 2}
 --- !u!1 &7330517682981522257
 GameObject:
   m_ObjectHideFlags: 0
