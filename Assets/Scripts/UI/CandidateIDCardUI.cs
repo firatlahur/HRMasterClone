@@ -114,7 +114,7 @@ namespace UI
 
                 if (_male)
                 {
-                    candidateExperience.text = "+" + _maleCandidate.candidateExperience + " Years";
+                    candidateExperience.text = _maleCandidate.candidateExperience + " Years";
 
                     candidatePosition.text = _maleCandidate.candidateWorkPosition;
 
@@ -123,7 +123,7 @@ namespace UI
                 }
                 else if (_female)
                 {
-                    candidateExperience.text = "+" + _femaleCandidate.candidateExperience + " Years";
+                    candidateExperience.text = _femaleCandidate.candidateExperience + " Years";
 
                     candidatePosition.text = _femaleCandidate.candidateWorkPosition;
 
