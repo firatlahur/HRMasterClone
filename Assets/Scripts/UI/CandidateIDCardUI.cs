@@ -183,6 +183,7 @@ namespace UI
             HiredCandidateEfficiency(_firstCandidate);
             hiredCandidateDetailsPrefab.SetEmployeeDetails(_firstCandidate);
             hiredCandidateManagerUI.InstantiateUIid();
+            scrollViewContentDetailsUI.SaveProgress();
 
             gameManager.inMeeting = false;
             gameManager.isHired = true;

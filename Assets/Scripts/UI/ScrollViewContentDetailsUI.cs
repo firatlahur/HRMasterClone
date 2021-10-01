@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Candidate;
 using UnityEngine;
 using System.IO;
+using System.IO.Compression;
+using System.Text;
 using Core;
 
 namespace UI
@@ -12,6 +14,7 @@ namespace UI
     {
         [HideInInspector] public int childCount;
         [HideInInspector] public float height;
+        [HideInInspector] public string json;
         public GameObject hiredCandidateDetailsPrefab;
         
         public List<SavedEmployees> savedEmployeesList;
@@ -23,21 +26,33 @@ namespace UI
             _rectTransform = GetComponent<RectTransform>();
             savedEmployeesList = new List<SavedEmployees>();
         }
-        
+
         private void Start() //load saved employee
         {
             if (File.Exists(Application.dataPath + "/EmployeeDetails.json"))
             {
-                string json = File.ReadAllText(Application.dataPath + "/EmployeeDetails.json");
-                JsonUtility.FromJsonOverwrite(json, this);
+                json = File.ReadAllText(Application.dataPath + "/EmployeeDetails.json");
+                JsonUtility.FromJsonOverwrite(Decompress(json), this);
                 SetDetailsOnRestart();
             }
         }
 
-        private void OnApplicationQuit() //save current employee
+        public void SaveProgress() //save current employee
         {
-            string json = JsonUtility.ToJson(this);
-            File.WriteAllText(Application.dataPath + "/EmployeeDetails.json",json);
+            json = JsonUtility.ToJson(this);
+            string compress = Compress(json);
+            File.WriteAllText(Application.dataPath + "/EmployeeDetails.json", compress);
+        }
+
+        private void OnApplicationQuit()
+        {
+            SaveProgress();
+        }
+
+        private void OnApplicationPause(bool pauseStatus)
+        {
+            if(pauseStatus)
+                SaveProgress();
         }
 
 
@@ -77,32 +92,59 @@ namespace UI
 
         private void SetDetailsOnRestart()
         {
-            if (transform.childCount == 0 && savedEmployeesList[0] != null)
+            if (savedEmployeesList.Count != 0)
             {
                 _rectTransform.sizeDelta = new Vector2(0, height);
 
                 for (int i = 0; i < childCount; i++)
                 {
-                  GameObject savedEmployee = Instantiate(hiredCandidateDetailsPrefab, transform, false);
+                    GameObject savedEmployee = Instantiate(hiredCandidateDetailsPrefab, transform, false);
 
-                  HiredCandidateDetailsPrefab prefab = savedEmployee.GetComponent<HiredCandidateDetailsPrefab>();
+                    HiredCandidateDetailsPrefab prefab = savedEmployee.GetComponent<HiredCandidateDetailsPrefab>();
 
-                  prefab.employeeName.text = savedEmployeesList[i].employeeName;
-                  prefab.employeeName.color = savedEmployeesList[i].fakeCheckColor;
-                  prefab.employeeDepartment.text = savedEmployeesList[i].department;
-                  prefab.employeeExp.text = savedEmployeesList[i].experience  + " Years of Experience";
-                  prefab.employeeSalary.text = savedEmployeesList[i].salary + "$";
+                    prefab.employeeName.text = savedEmployeesList[i].employeeName;
+                    prefab.employeeName.color = savedEmployeesList[i].fakeCheckColor;
+                    prefab.employeeDepartment.text = savedEmployeesList[i].department;
+                    prefab.employeeExp.text = savedEmployeesList[i].experience + " Years of Experience";
+                    prefab.employeeSalary.text = savedEmployeesList[i].salary + "$";
 
-                  if (savedEmployee.GetComponent<MaleCandidate>())
-                  {
-                      prefab.employeeImage.sprite = savedEmployeesList[i].sprite;
-                  }
-                  else
-                  {
-                      prefab.employeeImage.sprite = savedEmployeesList[i].sprite;
-                  }
-                      
+                    if (savedEmployee.GetComponent<MaleCandidate>())
+                    {
+                        prefab.employeeImage.sprite = savedEmployeesList[i].sprite;
+                    }
+                    else
+                    {
+                        prefab.employeeImage.sprite = savedEmployeesList[i].sprite;
+                    }
                 }
+            }
+        }
+
+        public static string Compress(string s)
+        {
+            var bytes = Encoding.Unicode.GetBytes(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+        public static string Decompress(string s)
+        {
+            var bytes = Convert.FromBase64String(s);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return Encoding.Unicode.GetString(mso.ToArray());
             }
         }
     }

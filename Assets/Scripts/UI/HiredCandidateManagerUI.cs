@@ -6,8 +6,6 @@ namespace UI
 {
     public class HiredCandidateManagerUI : MonoBehaviour
     {
-        public GameManager gameManager;
-        
         public GameObject hiredCandidateDetails;
         public RectTransform content;
 
