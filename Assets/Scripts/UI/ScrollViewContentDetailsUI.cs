@@ -116,6 +116,7 @@ namespace UI
                     {
                         prefab.employeeImage.sprite = savedEmployeesList[i].sprite;
                     }
+                    savedEmployee.gameObject.SetActive(false);
                 }
             }
         }

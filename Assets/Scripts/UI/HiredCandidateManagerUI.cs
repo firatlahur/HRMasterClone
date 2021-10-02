@@ -20,7 +20,8 @@ namespace UI
 
         public void InstantiateUIid()
         {
-           Instantiate(hiredCandidateDetails, content.transform, false);
+           GameObject hiredCandidate = Instantiate(hiredCandidateDetails, content.transform, false);
+           hiredCandidate.gameObject.SetActive(false);
         }
 
         public void ContentSizeManager()

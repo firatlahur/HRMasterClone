@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Candidate.ScriptableObjects;
+using Core;
 using Unity.Mathematics;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -13,11 +14,11 @@ namespace Candidate
 
         public CandidateManager candidateManager;
         public GameObject candidateContainer;
+        public GameManager gameManager;
         
         
         private Vector3 _candidateSpawnOffset;
         private Quaternion _inLineRotation, _firstInLineRotation;
-
         private void Awake()
         {
             allCandidates = new List<GameObject>();
@@ -28,28 +29,25 @@ namespace Candidate
             _firstInLineRotation = Quaternion.Euler(0f, 90f, 0f);
         }
 
-        private void Start()
-        {
-            InstantiateCandidates();
-        }
 
-        private void InstantiateCandidates()
+        public void InstantiateCandidates()
         {
             for (int i = 0; i < candidateManager.candidatesToSpawn; i++)
             {
-              GameObject candidate =
-                  Instantiate(candidateManager.candidates[Random.Range(0, candidateManager.candidates.Length)],
-                    Vector3.zero, _firstInLineRotation);
-              
-              if (i > 0)
-              {
-                  candidate.transform.position += _candidateSpawnOffset;
-                  candidate.transform.rotation = _inLineRotation;
-                  _candidateSpawnOffset.x -= .55f;
-                  _candidateSpawnOffset.z += .52f;
-              }
-              allCandidates.Add(candidate);
-              candidate.transform.SetParent(candidateContainer.transform);
+                GameObject candidate =
+                    Instantiate(candidateManager.candidates[Random.Range(0, candidateManager.candidates.Length)],
+                        Vector3.zero, _firstInLineRotation);
+
+                if (i > 0)
+                {
+                    candidate.transform.position += _candidateSpawnOffset;
+                    candidate.transform.rotation = _inLineRotation;
+                    _candidateSpawnOffset.x -= .55f;
+                    _candidateSpawnOffset.z += .52f;
+                }
+
+                allCandidates.Add(candidate);
+                candidate.transform.SetParent(candidateContainer.transform);
             }
         }
     }
